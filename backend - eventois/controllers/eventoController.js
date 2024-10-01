@@ -33,20 +33,6 @@ const eventoController = {
         }
     },
 
-    // async buscarPorId(req, res) {
-    //     const id = req.params.id;
-    //     try {
-    //         const evento = await new Evento().getById(id);
-    //         if (evento) {
-    //             res.json(evento);
-    //         } else {
-    //             res.status(404).json({ message: 'Evento não encontrado' });
-    //         }
-    //     } catch (erro) {
-    //         res.status(500).json({ error: erro.message });
-    //     }
-    // },
-
     async buscarPorId(req, res) {
         if (req.method !== 'GET') {
             return res.status(405).json({ error: "Método não permitido. Utilize GET para buscar um evento por ID." });
@@ -111,6 +97,21 @@ const eventoController = {
             res.status(200).json({ message: 'Evento deletado com sucesso' });
         } catch (error) {
             res.status(400).json({ error: error.message });
+        }
+    },
+
+    async cadastrarEvento(evento) {
+        const { nome, data, local } = evento;
+        const query = 'INSERT INTO eventos (nome, data, local) VALUES (?, ?, ?)';
+        const values = [nome, data, local];
+        conexao = await connect();
+        
+        try {
+            const [result] = await conexao.execute(query, values);
+            return { id: result.insertId, nome, data, local };
+        } catch (error) {
+            console.error('Erro ao inserir evento:', error);
+            throw error;
         }
     }
 };

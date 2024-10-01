@@ -146,39 +146,6 @@ export default class EventoDAO {
         }
     }
 
-    // async excluir(evento) {
-    //     if (!(evento instanceof Evento) || !evento.id) {
-    //         console.error("Evento não encontrado para exclusão ou ID não definido.");
-    //         return;
-    //     }
-
-    //     let conexao;
-    //     try {
-    //         conexao = await connect();
-
-    //         if (!conexao) {
-    //             throw new Error("Não foi possível estabelecer uma conexão com o banco de dados.");
-    //         }
-
-    //         const sql = `DELETE FROM Evento WHERE id = ?;`;
-    //         const valores = [evento.id];
-
-    //         const [resultado] = await conexao.execute(sql, valores);
-
-    //         if (resultado.affectedRows === 0) {
-    //             console.error("Nenhum evento encontrado com o ID fornecido.");
-    //         } else {
-    //             console.log("Evento excluído com sucesso!");
-    //         }
-    //     } catch (erro) {
-    //         console.error("Erro ao excluir o evento:", erro);
-    //     } finally {
-    //         if (conexao) {
-    //             await conexao.release();  
-    //         }
-    //     }
-    // }
-
     async getById(id) {
         let conexao;
         try {
@@ -253,4 +220,6 @@ export default class EventoDAO {
             }
         }
     }
+
+     
 }

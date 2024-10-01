@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Evento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .events-list {
+            width: 300px;
+            margin: 20px auto;
+        }
+        .event-item {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Cadastrar Evento</h2>
+        <form id="eventForm">
+            <div>
+                <label for="eventName">Nome do Evento:</label><br>
+                <input type="text" id="eventName" required>
+            </div>
+            <div>
+                <label for="eventCity">Cidade:</label><br>
+                <input type="text" id="eventCity" required>
+            </div>
+            <div>
+                <label for="eventState">Estado:</label><br>
+                <input type="text" id="eventState" required>
+            </div>
+            <div>
+                <label for="eventDate">Data do Evento:</label><br>
+                <input type="date" id="eventDate" required>
+            </div>
+            <div>
+                <label for="eventTime">Horário:</label><br>
+                <input type="time" id="eventTime" required>
+            </div>
+            <div>
+                <label for="eventPrice">Preço:</label><br>
+                <input type="number" id="eventPrice" required>
+            </div>
+            <div>
+                <label for="eventQuantity">Quantidade:</label><br>
+                <input type="number" id="eventQuantity" required>
+            </div>
+            <div>
+                <label for="eventDescription">Descrição:</label><br>
+                <textarea id="eventDescription" required></textarea>
+            </div>
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+
+    <div class="events-list">
+        <h2>Eventos Disponíveis</h2>
+        <div id="eventList"></div>
+    </div>
+
+    <script>
+        document.getElementById('eventForm').addEventListener('submit', async function(event) {
+            event.preventDefault();   
+            
+            
+            const eventName = document.getElementById('eventName').value;
+            const eventCity = document.getElementById('eventCity').value;
+            const eventState = document.getElementById('eventState').value;
+            const eventDate = document.getElementById('eventDate').value;
+            const eventTime = document.getElementById('eventTime').value;
+            const eventPrice = document.getElementById('eventPrice').value;
+            const eventQuantity = document.getElementById('eventQuantity').value;
+            const eventDescription = document.getElementById('eventDescription').value;
+ 
+            const newEvent = {
+                nome: eventName,
+                cidade: eventCity,
+                estado: eventState,
+                data: eventDate,
+                horario: eventTime,
+                preco: eventPrice,
+                quantidade: eventQuantity,
+                descricao: eventDescription
+            };
+            
+            try {
+             
+                const response = await fetch('http://localhost:4000/api/eventos/cadastrar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newEvent)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao cadastrar evento: ' + response.statusText);
+                }
+
+                const result = await response.json();
+                console.log('Evento cadastrado com sucesso:', result);
+
+    
+                const eventList = document.getElementById('eventList');
+                const eventItem = document.createElement('div');
+                eventItem.classList.add('event-item');
+                eventItem.innerHTML = `<strong>${eventName}</strong><br>Data: ${eventDate} ${eventTime}<br>Local: ${eventCity}, ${eventState}<br>Preço: R$${eventPrice}<br>Quantidade: ${eventQuantity}<br>Descrição: ${eventDescription}`;
+                eventList.appendChild(eventItem);
+                document.getElementById('eventForm').reset();
+
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao cadastrar evento');
+            }
+        });
+    </script>
+
+</body>
+</html>
